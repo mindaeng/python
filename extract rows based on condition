@@ -1,0 +1,26 @@
+# drive mount
+from google.colab import drive
+drive.mount('/content/drive')
+df =pd.read_excel(r'./drive/MyDrive/KO/2020_07.xlsx')
+
+# 
+import pandas as pd
+
+# extract rows based on condition 
+# extract all rows which contain "전석" in df['좌석등급']
+df1 = df[df['좌석등급'].str.contains("전석", case=False)]
+
+# extract all rows which contain "사전예약" in df['좌석등급']
+df2 = df1[df1['좌석등급'].str.contains("사전예약", case=False)]
+
+
+# remove all rows which contain "전석" in df['좌석등급']
+df1 = df[~df['좌석등급'].str.contains("전석", case=False)]
+
+# remove all rows which contain "사전예약" in df['좌석등급']
+df2 = df1[~df1['좌석등급'].str.contains("사전예약", case=False)]
+
+df2['좌석등급'].value_counts(ascending=True)
+
+# make a new csv file
+pd.DataFrame(df2).to_csv('./drive/MyDrive/KOPIS/csv1.csv', header=True, index=False)
