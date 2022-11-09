@@ -1,0 +1,76 @@
+# drive.mount
+
+from google.colab import drive
+drive.mount('/content/drive')
+df =pd.read_csv(r'./drive/MyDrive/경기지역/2.csv')
+
+# 
+import pandas as pd
+import pandas as pd
+import numpy as np
+
+# for Korean fonts
+!sudo apt-get install -y fonts-nanum
+!sudo fc-cache -fv
+!rm ~/.cache/matplotlib -rf
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+print(mpl.rcParams['font.family'])
+plt.rc('font', family='NanumGothic')
+mpl.rcParams['axes.unicode_minus'] = False
+
+# specify Pdf 
+from matplotlib.backends.backend_pdf import PdfPages
+mypdf = PdfPages('charts1.pdf')
+
+import os
+current_path=os.getcwd()
+os.chdir('./drive/MyDrive/공유됨')
+
+# print piecharts and make PdfPages
+for i in range(0, 310) :
+    x = t1.num[i]
+    wedgeprops={'width': 0.7, 'edgecolor': 'w', 'linewidth': 5}
+    labels = t1.uspc[i]
+    fig = plt.figure(figsize=(15, 15))
+    plt.title(t1.uspc_class[i], loc='right', pad=20)
+    my_colours = ["#dde5b6", "#adc178", "#a98467", "#6c584c","pink", "orange", 'gray', 'lightblue']
+    plt.pie(x, labels=labels, autopct='%.2f%%', counterclock=False, wedgeprops=wedgeprops, textprops={'size':10},colors=my_colours)
+    mypdf.savefig(fig)
+    plt.show()
+
+mypdf.close()
+
+# now check 'charts1.pdf'
+
+
+# another example
+
+data = data.replace('-',0)
+data['2021.2/2'] = data['2021.2/2'].astype(float)
+data['2020.2/2'] = data['2020.2/2'].astype(float)
+data['2019.2/2'] = data['2019.2/2'].astype(float)
+data['2018.2/2'] = data['2018.2/2'].astype(float)
+data['2017.2/2'] = data['2017.2/2'].astype(float)
+
+from matplotlib.backends.backend_pdf import PdfPages
+mypdf = PdfPages('2분기.pdf')
+
+df_gr1 = df.groupby('행정구역별')
+for a,b in df_gr1:
+  print(a)
+  df_gr2 = b.groupby('산업별')
+  for x,y in df_gr2:
+    fig = plt.figure(figsize=(10,10))
+    plt.plot(['2017.2/2','2018.2/2','2019.2/2','2020.2/2','2021.2/2'], [y['2017.2/2'],y['2018.2/2'],y['2019.2/2'],y['2020.2/2'],y['2021.2/2']])
+    plt.xlabel('2분기')
+    plt.ylabel('비율')
+    plt.title(a+' '+x)
+    mypdf.savefig(fig)
+    plt.show()
+
+mypdf.close()
+
+# now check '2분기.pdf'
