@@ -1,0 +1,36 @@
+## HW 2
+Answer folloing questions using tensorflow's gradient tape.  
+
+EX)
+```
+input_var = tf.Variable(initial_value=3.)
+with tf.GradientTape() as tape:
+   result = tf.square(input_var)
+gradient = tape.gradient(result, input_var)
+```
+
+### Q1 Differentiate $y = x^2 + 3x + 1$ with respect to a scalar variable $x$.
+
+import tensorflow as tf
+x = tf.Variable(0)
+with tf.GradientTape() as tape :
+    y = x**2 + 3*x + 1
+grad_of_y_wrt_x = tape.gradient(y,x)
+
+### Q2 Differentiate $y = X^3 + 3X + 5$ with respect to a 2 by 2 matrix variable $X$.
+
+import tensorflow as tf
+X = tf.Variable(tf.random.uniform((2,2)))
+with tf.GradientTape() as tape:
+    y = X**3 + 3*X + 5
+grad_of_y_wrt_X = tape.gradient(y,X)
+
+### Q3 Differentiate $z = X^3 y^2 + 3X + 2Xy + 1$ with respect to a 2 by 2 matrix variable $X$ and a scalar variable $y$.
+
+x = tf.Variable(tf.random.uniform((2,2)))
+y = tf.Variable(tf.zeros((2,)))
+z = tf.random.uniform((2,2))
+with tf.GradientTape() as tape:
+    z = (x**3)*(y**2) + 3*x + 2*x*y + 1
+
+grad_of_z_wrt_x_and_y = tape.gradient(z,[x,y])
