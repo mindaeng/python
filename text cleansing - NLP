@@ -1,3 +1,10 @@
+# check the text -> there are too many things to remove(punctuation, emoji, etc)
+for i in range(50):
+    print(test['text'][i])
+    
+
+# start text cleansing
+
 import numpy as np
 import pandas as pd 
 import matplotlib.pyplot as plt
@@ -23,8 +30,8 @@ import re
 import string
 
 def remove_URL(text):
-    url = re.compile(r'https?://\S+|www\.\S+')
-    return url.sub(r'', text)
+    url = re.compile(r'https?://\S+')
+    return url.sub(r' httpsmark ', text)
 
 
 def remove_html(text):
@@ -34,22 +41,22 @@ def remove_html(text):
 
 def remove_atsymbol(text):
     name = re.compile(r'@\S+')
-    return name.sub(r'', text)
+    return name.sub(r' atsymbol ', text)
 
 
 def remove_hashtag(text):
     hashtag = re.compile(r'#')
-    return hashtag.sub(r'', text)
+    return hashtag.sub(r' hashtag ', text)
 
 
 def remove_exclamation(text):
     exclamation = re.compile(r'!')
-    return exclamation.sub(r'', text)
+    return exclamation.sub(r' exclamation ', text)
 
 
 def remove_question(text):
     question = re.compile(r'?')
-    return question.sub(r'', text)
+    return question.sub(r' question ', text)
 
 
 def remove_punc(text):
@@ -58,7 +65,7 @@ def remove_punc(text):
 
 def remove_number(text):
     number = re.compile(r'\d+')
-    return number.sub(r'', text)
+    return number.sub(r' number ', text)
 
 
 def remove_emoji(string):
@@ -82,23 +89,60 @@ def remove_emoji(string):
                                u"\ufe0f"  # dingbats
                                u"\u3030"
                                "]+", flags=re.UNICODE)
-    return emoji_pattern.sub(r'', string)
+    return emoji_pattern.sub(r' emoji ', string)
 
 
-train_cl['text'] = train_cl['text'].str.lower()
-train_cl['text'] = train_cl['text'].apply(lambda text: remove_URL(text))
-train_cl['text'] = train_cl['text'].apply(lambda text: remove_html(text))
-train_cl['text'] = train_cl['text'].apply(lambda text: remove_atsymbol(text))
-train_cl['text'] = train_cl['text'].apply(lambda text: remove_hashtag(text))
-train_cl['text'] = train_cl['text'].apply(lambda text: remove_exclamation(text))
-train_cl['text'] = train_cl['text'].apply(lambda text: remove_punc(text))
-train_cl['text'] = train_cl['text'].apply(lambda text: remove_number(text))
-train_cl['text'] = train_cl['text'].apply(lambda text: remove_emoji(text))
+train['text'] = train['text'].str.lower()
+train['text'] = train['text'].apply(lambda text: remove_URL(text))
+train['text'] = train['text'].apply(lambda text: remove_html(text))
+train['text'] = train['text'].apply(lambda text: remove_atsymbol(text))
+train['text'] = train['text'].apply(lambda text: remove_hashtag(text))
+train['text'] = train['text'].apply(lambda text: remove_exclamation(text))
+train['text'] = train['text'].apply(lambda text: remove_punc(text))
+train['text'] = train['text'].apply(lambda text: remove_number(text))
+train['text'] = train['text'].apply(lambda text: remove_emoji(text))
+
+
+
+
+test['text']  = test['text'].str.lower()
+test['text']  = test['text'].apply(lambda text: remove_URL(text))
+test['text']  = test['text'].apply(lambda text: remove_html(text))
+test['text']  = test['text'].apply(lambda text: remove_atsymbol(text))
+test['text']  = test['text'].apply(lambda text: remove_hashtag(text))
+test['text']  = test['text'].apply(lambda text: remove_exclamation(text))
+test['text']  = test['text'].apply(lambda text: remove_punc(text))
+test['text']  = test['text'].apply(lambda text: remove_number(text))
+test['text']  = test['text'].apply(lambda text: remove_emoji(text))
+
+
+def remove_S_and_N(text):
+  return re.sub("[^A-Za-z ']"," ",text)
+train['text']  = train['text'].apply(lambda text: remove_S_and_N(text))
+
+def remove_S_and_N(text):
+  return re.sub("[^A-Za-z ']"," ",text)
+test['text']  = test['text'].apply(lambda text: remove_S_and_N(text))
 
 
 # checking whether they are removed well or not
-for i in range(15):
-  print(train_cl['text'][i])
+for i in range(50):
+  print(test['text'][i])
+  
+  
+def remove_Spaces(text):
+  return re.sub('%20', ' ', str(text))
+test['keyword'] = test['keyword'].apply(lambda text: remove_Spaces(text))
+train['keyword'] = train['keyword'].apply(lambda text: remove_Spaces(text))
+
+train[train.iloc[:,:] == 'nan'] = np.NaN
+print(train.isnull().sum())
+test[test.iloc[:,:] == 'nan'] = np.NaN
+print(test.isnull().sum())
+
+train["keyword"].value_counts()
+
+
 
 
 
